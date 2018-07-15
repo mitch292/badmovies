@@ -78,10 +78,9 @@ app.post('/delete', function(req, res) {
   db.deleteFavorites(req.body, (err, success) => {
     if (err) {
       console.error('there was an error delting this item', err);
-    } else {
-      res.send();
     }
   });
+  res.send()
 });
 
 app.listen(3000, function() {

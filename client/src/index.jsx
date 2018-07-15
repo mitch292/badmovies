@@ -92,12 +92,13 @@ class App extends React.Component {
       dbId: movieToDelete.dbId
     })
     .then((response) => {
+      console.log('about to re-render our favorites')
       axios.get('/favorites')
-      .then((response) => {
-        this.setState({
-          favorites: response.data
+        .then((response) => {
+          this.setState({
+            favorites: response.data
+          })
         })
-      })
     })
     .catch((err) => {
       console.error('there was an error deleting this file from your favorites', err);
