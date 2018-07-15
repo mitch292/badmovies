@@ -2,6 +2,13 @@ const mysql = require('mysql');
 const mysqlConfig = require('./config.js');
 
 const connection = mysql.createConnection(mysqlConfig);
+connection.connect((err) => {
+  if (err) {
+    console.error('there was an error connecting to the db:', err);
+  } else {
+    console.log(`connected as id ${connection.threadId}`)
+  }
+});
 
 const getAllFavorites = function(callback) {
   // get favorites from the database
@@ -18,5 +25,5 @@ const deleteFavorites = function(callback) {
 module.exports = {
   getAllFavorites,
   saveFavorite,
-  deleteFavorite
+  deleteFavorites
 };
