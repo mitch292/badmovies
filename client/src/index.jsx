@@ -85,14 +85,12 @@ class App extends React.Component {
   deleteMovie(index) {
     // same as above but do something diff
     let movieToDelete = this.state.favorites[index];
-    console.log('the movie we want to delte from our react state', movieToDelete)
 
     axios.post('/delete', {
       title: movieToDelete.title,
       dbId: movieToDelete.dbId
     })
     .then((response) => {
-      console.log('about to re-render our favorites')
       axios.get('/favorites')
         .then((response) => {
           this.setState({

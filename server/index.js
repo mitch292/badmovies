@@ -30,7 +30,6 @@ app.get('/search', function(req, res) {
 
 app.get('/genre/search', function(req, res) {
     // get the search genre
-    console.log('req for genre search', req.query)
     let genre = req.query.genreName;
     let id = req.query.id;
     axios.get(`https://api.themoviedb.org/3/discover/movie?with_genres=${id}&sort_by=vote_average.asc&api_key=${config.API_KEY}`)
@@ -74,7 +73,6 @@ app.post('/save', function(req, res) {
 });
 
 app.post('/delete', function(req, res) {
-  console.log('the paramater were telling the database to delete', req.body)
   db.deleteFavorites(req.body, (err, success) => {
     if (err) {
       console.error('there was an error delting this item', err);

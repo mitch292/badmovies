@@ -43,9 +43,7 @@ const saveFavorite = function(params, callback) {
 
 const deleteFavorites = function(params, callback) {
   // delete a movie from favorites in the database
-  console.log('params passed to delete', params)
   let argToDel = {id: params.dbId}
-  console.log('arg to delete', argToDel)
   connection.query('DELETE FROM movies WHERE ?', argToDel, (err, results, fields) => {
     if (err) {
       callback(err, null);
