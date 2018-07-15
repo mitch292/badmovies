@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 var axios = require('axios');
-var db = require('./database');
+var db = require('./database.js');
 var config = require('./config');
 var cors = require('cors');
 var app = express();
@@ -53,12 +53,35 @@ app.get('/genres', function(req, res) {
       })
 });
 
-app.post('/save', function(req, res) {
+//internal request to my db
+app.get('/favorites', function(req, res) {
+  db.getAllFavorites((err, favorites) => {
+    if (err) {
+      console.error('there was an error getting your favorites from the database', err)
+    } else {
+      res.send(favorites);
+    }
+  })
+})
 
+
+
+// POSTS
+app.post('/save', function(req, res) {
+  db.saveFavorite(req.body);
+  res.send()
+  
 });
 
 app.post('/delete', function(req, res) {
-
+  console.log('the paramater were telling the database to delete', req.body)
+  db.deleteFavorites(req.body, (err, success) => {
+    if (err) {
+      console.error('there was an error delting this item', err);
+    } else {
+      res.send();
+    }
+  });
 });
 
 app.listen(3000, function() {

@@ -11,7 +11,7 @@ class App extends React.Component {
   	super(props)
   	this.state = {
       movies: [{deway: "movies"}],
-      favorites: [{deway: "favorites"}],
+      favorites: [],
       showFaves: false,
       genres: []
     };
@@ -47,6 +47,7 @@ class App extends React.Component {
   getDefaultMovies() {
     axios.get('/search')
       .then((response) => {
+        console.log(response);
         this.setState({
           movies: response.data
         })
@@ -56,12 +57,51 @@ class App extends React.Component {
       })
   }
 
-  saveMovie() {
+  saveMovie(index) {
     // same as above but do something diff
+    let movieToSave = this.state.movies[index];
+
+    axios.post('/save', {
+      title: movieToSave.title,
+      rating: movieToSave.vote_average,
+      poster: movieToSave.poster_path,
+      releasedate: movieToSave.release_date
+    })
+      .then((response) => {
+        axios.get('/favorites')
+          .then((response) => {
+            this.setState({
+              favorites: response.data
+            })
+          })
+
+      })
+      .catch((err) => {
+        console.error('there was an error saving this movie to your profile', err)
+      })
+
   }
 
-  deleteMovie() {
+  deleteMovie(index) {
     // same as above but do something diff
+    let movieToDelete = this.state.favorites[index];
+    console.log('the movie we want to delte from our react state', movieToDelete)
+
+    axios.post('/delete', {
+      title: movieToDelete.title,
+      dbId: movieToDelete.dbId
+    })
+    .then((response) => {
+      axios.get('/favorites')
+      .then((response) => {
+        this.setState({
+          favorites: response.data
+        })
+      })
+    })
+    .catch((err) => {
+      console.error('there was an error deleting this file from your favorites', err);
+    })
   }
 
   swapFavorites() {
@@ -73,6 +113,12 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getDefaultMovies();
+    axios.get('/favorites')
+          .then((response) => {
+            this.setState({
+              favorites: response.data
+            })
+          })
   }
 
   render () {
@@ -82,7 +128,7 @@ class App extends React.Component {
         
         <div className="main">
           <Search genres={this.state.genres} swapFavorites={this.swapFavorites} showFaves={this.state.showFaves} getMovies={this.getMovies}/>
-          <Movies movies={this.state.showFaves ? this.state.favorites : this.state.movies} showFaves={this.state.showFaves}/>
+          <Movies saveThisMovie={this.saveMovie} deleteThisMovie={this.deleteMovie} movies={this.state.showFaves ? this.state.favorites : this.state.movies} showFaves={this.state.showFaves}/>
         </div>
       </div>
     );
