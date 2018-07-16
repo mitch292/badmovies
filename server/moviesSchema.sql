@@ -7,5 +7,6 @@ CREATE TABLE movies (
   title TEXT,
   rating TEXT,
   poster TEXT,
-  releasedate TEXT
+  releasedate TEXT,
+  comment TEXT
 );

@@ -23,7 +23,8 @@ const getAllFavorites = function(callback) {
           title: result.title,
           vote_average: result.rating,
           poster_path: result.poster,
-          release_date: result.releasedate
+          release_date: result.releasedate,
+          comment: result.comment
         };
         favoriteMovies.push(aMovie)
       })
@@ -51,8 +52,18 @@ const deleteFavorites = function(params, callback) {
   })
 };
 
+const updateComment = function(params, callback) {
+  console.log('the params received by the db', params)
+  connection.query('UPDATE movies SET comment = ? WHERE id = ?', [params.comment, params.dbId], (err, results, fiels) => {
+    if (err) {
+      callback(err);
+    }
+  })
+}
+
 module.exports = {
   getAllFavorites,
   saveFavorite,
-  deleteFavorites
+  deleteFavorites,
+  updateComment
 };

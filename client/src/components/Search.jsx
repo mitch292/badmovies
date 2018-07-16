@@ -42,6 +42,7 @@ class Search extends React.Component {
     return (
       <div className="search">
         <button onClick={() => {this.props.swapFavorites()}}>{this.props.showFaves ? "Show Results" : "Show Favorites"}</button>
+        <p>You have {this.props.favAmount} favorites saved!</p>
         <br/><br/>
 
         {/* Make the select options dynamic from genres !!! */}

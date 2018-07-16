@@ -129,3 +129,12 @@ html, body, #app {
 .movie_rating {
   align-items: flex-end;
 }
+
+.review {
+  height: 100px;
+  width: 400px;
+}
+
+.moviereview {
+  background-color: #eee;
+}

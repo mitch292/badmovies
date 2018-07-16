@@ -81,6 +81,19 @@ app.post('/delete', function(req, res) {
   res.send()
 });
 
+app.post('/comment', function(req, res) {
+  console.log('request body in the comment post', req.body)
+  //should have the comment and the db id
+  db.updateComment(req.body, (err) => {
+    if (err) {
+      console.error('we had some trouble updating the comment in the db', err)
+    }
+  })
+  res.send()
+})
+
+
+
 app.listen(3000, function() {
   console.log('listening on port 3000!');
 });

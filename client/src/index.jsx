@@ -13,7 +13,9 @@ class App extends React.Component {
       movies: [{deway: "movies"}],
       favorites: [],
       showFaves: false,
-      genres: []
+      genres: [],
+      toggleComment: false,
+      commentIndex: 0
     };
     
     // you might have to do something important here!
@@ -22,6 +24,8 @@ class App extends React.Component {
     this.deleteMovie = this.deleteMovie.bind(this);
     this.swapFavorites = this.swapFavorites.bind(this);
     this.getDefaultMovies = this.getDefaultMovies.bind(this);
+    this.submitComment = this.submitComment.bind(this);
+    this.showCommentField = this.showCommentField.bind(this)
   }
 
   getMovies(genre) {
@@ -110,6 +114,32 @@ class App extends React.Component {
     });
   }
 
+  showCommentField(index) {
+    this.setState({
+      toggleComment: !this.state.toggleComment,
+      commentIndex: index
+    })
+  }
+
+  submitComment(review) {
+
+    axios.post('/comment', {
+      comment: review,
+      dbId: this.state.favorites[this.state.commentIndex].dbId
+    })
+      .then((response) => {
+        axios.get('/favorites')
+        .then((response) => {
+          this.setState({
+            favorites: response.data,
+          })
+        })
+      })
+      .catch((err) => {
+        console.error('there was an error posting the comment to the db', err)
+      })
+  }
+
   componentDidMount() {
     this.getDefaultMovies();
     axios.get('/favorites')
@@ -126,8 +156,8 @@ class App extends React.Component {
         <header className="navbar"><h1>Bad Movies</h1></header> 
         
         <div className="main">
-          <Search genres={this.state.genres} swapFavorites={this.swapFavorites} showFaves={this.state.showFaves} getMovies={this.getMovies}/>
-          <Movies saveThisMovie={this.saveMovie} deleteThisMovie={this.deleteMovie} movies={this.state.showFaves ? this.state.favorites : this.state.movies} showFaves={this.state.showFaves}/>
+          <Search favAmount={this.state.favorites.length} genres={this.state.genres} swapFavorites={this.swapFavorites} showFaves={this.state.showFaves} getMovies={this.getMovies}/>
+          <Movies commentToggle={this.state.toggleComment} showComment={this.showCommentField} submitComment={this.submitComment} saveThisMovie={this.saveMovie} deleteThisMovie={this.deleteMovie} movies={this.state.showFaves ? this.state.favorites : this.state.movies} showFaves={this.state.showFaves}/>
         </div>
       </div>
     );
